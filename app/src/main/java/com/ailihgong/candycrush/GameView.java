@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -37,6 +38,8 @@ public class GameView extends View {
     private int size;
     private int width;
     private int height;
+
+    private EditText scoreText;
 
     public GameView(Context context, AttributeSet attr) {
         super(context, attr);
@@ -135,6 +138,15 @@ public class GameView extends View {
         removeCells(this.matrix, set2);
 
         invalidate();
+
+        handleRemoveCells();
+
+        this.getScoreText().setText(String.valueOf(Integer.parseInt(this.getScoreText().getText().toString()) + 1));
+    }
+
+    public void handleRemoveCells() {
+        swapState = true;
+
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -143,7 +155,30 @@ public class GameView extends View {
 
                 invalidate();
             }
-        }, 600);
+        }, 400);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                fillNewCells(matrix);
+                invalidate();
+            }
+        }, 1000);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Set<Pair<Integer, Integer>> set3 = findAllCellsToRemove(matrix);
+                removeCells(matrix, set3);
+                invalidate();
+
+                if (isAnyNeg(matrix)) {
+                    handleRemoveCells();
+                } else {
+                    swapState = false;
+                }
+            }
+        }, 1400);
     }
 
     @Override
@@ -153,10 +188,6 @@ public class GameView extends View {
         final int action = ev.getAction();
 
         if (swapState) {
-            return false;
-        }
-
-        if (loadAnimalState) {
             return false;
         }
 
@@ -279,22 +310,6 @@ public class GameView extends View {
 
     public void moveRemovedCellsUp(int[][] matrix) {
         System.out.println("In moving removed cells upwards");
-//        for (int k = 0; k < matrix[0].length; k++) {
-//            int i = matrix.length - 1;
-//            int j = matrix.length - 1;
-//            while (i >= 0 && j >= 0) {
-//                while (matrix[j][k] == -1) {
-//                    j--;
-//                }
-//                matrix[i][k] = matrix[j][k];
-//                i--;
-//                j--;
-//            }
-//            while (i >= 0) {
-//                matrix[i][k] = -1;
-//                i--;
-//            }
-//        }
 
         for (int k = 0; k < matrix.length; k++) {
             int i = matrix[0].length - 1;
@@ -318,8 +333,100 @@ public class GameView extends View {
         }
     }
 
+    public void fillNewCells(int[][] matrix) {
+        int i = 0;
+        int j = 0;
+        firstWhile:
+        while (i < matrix[0].length && j < matrix.length) {
+            while (j < matrix.length && matrix[j][0] != -1) {
+                j++;
+                if (j >= matrix.length) {
+                    break firstWhile;
+                }
+            }
+            while (i < matrix[0].length && matrix[j][i] == -1) {
+                int r = random.nextInt(randomUpperBound);
+                matrix[j][i] = r;
+                i++;
+            }
+            j ++;
+            i = 0;
+        }
+    }
+
+    public static Set<Pair<Integer, Integer>> findAllCellsToRemove(int[][] matrix) {
+        Set<Pair<Integer, Integer>> set = new HashSet<Pair<Integer, Integer>>();
+        for (int c = 0; c < matrix[0].length; c++) {
+            int i = 0;
+            int j = 0;
+            while (i < matrix.length && j < matrix.length) {
+                while (j < matrix.length - 1 && matrix[i][c] == matrix[j + 1][c]) {
+                    j ++;
+                }
+
+                if (i == j) {
+                    i ++;
+                    j ++;
+                } else if (j - i >= 2) {
+                    while (i <= j) {
+                        //System.out.print(matrix[i][c] + " \t");
+                        set.add(new Pair<Integer, Integer>(i, c));
+                        i ++;
+                    }
+                    i = j;
+                } else {
+                    i = j;
+                }
+            }
+        }
+
+        for (int r = 0; r < matrix.length; r++) {
+            int i = 0;
+            int j = 0;
+            while (i < matrix[0].length && j < matrix[0].length) {
+                while (j < matrix[0].length - 1 && matrix[r][i] == matrix[r][j + 1]) {
+                    j ++;
+                }
+
+                if (i == j) {
+                    i ++;
+                    j ++;
+                } else if (j - i >= 2) {
+                    while (i <= j) {
+                        //System.out.print(matrix[r][i] + " \t");
+                        set.add(new Pair<Integer, Integer>(r, i));
+                        i ++;
+                    }
+                    i = j;
+                } else {
+                    i = j;
+                }
+            }
+        }
+        return set;
+    }
+
+    public boolean isAnyNeg(int[][] matrix) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (matrix[i][j] == -1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 
+    public EditText getScoreText() {
+        return scoreText;
+    }
 
+    public void setScoreText(EditText scoreText) {
+        this.scoreText = scoreText;
+    }
 
+    public void resetButtonClicked() {
+
+    }
 }

@@ -18,14 +18,76 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/cupcakebackground" />
 
-    <view
-        android:id="@+id/gameview"
-        class="com.ailihgong.candycrush.GameView"
-        android:layout_width="360dp"
-        android:layout_height="540dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <view
+            android:id="@+id/gameview"
+            class="com.ailihgong.candycrush.GameView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent=".9"
+            app:layout_constraintDimensionRatio="8:12"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintVertical_bias="0.8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/resetButton"
+            android:text="Reset"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textColor="#000"
+            android:onClick="resetButtonClicked"
+            app:layout_constraintWidth_percent=".3"
+            app:layout_constraintDimensionRatio="5:2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintVertical_bias="0.01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"  />
+
+        <EditText
+            android:id="@+id/scoreEditText"
+            android:text="Score:"
+            android:ems="10"
+            android:inputType="number"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textColor="#000"
+            android:gravity="left"
+            android:background="@android:color/transparent"
+            app:layout_constraintWidth_percent=".2"
+            app:layout_constraintDimensionRatio="5:2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.87"
+            app:layout_constraintVertical_bias="0.02"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:ems="10"
+            android:inputType="number"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textColor="#000"
+            android:gravity="right"
+            android:background="@android:color/transparent"
+            app:layout_constraintWidth_percent=".2"
+            app:layout_constraintDimensionRatio="5:2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.93"
+            app:layout_constraintVertical_bias="0.02"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
