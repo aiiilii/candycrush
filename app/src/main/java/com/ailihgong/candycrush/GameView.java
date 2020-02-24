@@ -22,9 +22,7 @@ public class GameView extends View {
     private static Random random = new Random();
 
     private boolean swapState = false;
-
-    private boolean loadAnimalState = false;
-
+    
     private int lastTouchC;
     private int lastTouchR;
     private int newTouchC;
@@ -109,7 +107,7 @@ public class GameView extends View {
                 } else if (matrix[i][j] == 5) {
                     paintBlock.setColor(Color.argb(255, 0, 255, 255));
                 } else if (matrix[i][j] == -1) {
-                    paintBlock.setColor(Color.argb(255, 0, 0, 0));
+                    paintBlock.setColor(Color.argb(0, 0, 0, 0));
                 }
 
                 canvas.drawRoundRect(i * size, j * size, size + i * size, size + j * size, 1, 1, paintBlock);
@@ -141,7 +139,6 @@ public class GameView extends View {
 
         handleRemoveCells();
 
-        this.getScoreText().setText(String.valueOf(Integer.parseInt(this.getScoreText().getText().toString()) + 1));
     }
 
     public void handleRemoveCells() {
@@ -303,9 +300,13 @@ public class GameView extends View {
     }
 
     public void removeCells(int[][] matrix, Set<Pair<Integer, Integer>> shouldRemoveCells) {
+        int count = 0;
         for (Pair<Integer, Integer> pair : shouldRemoveCells) {
             matrix[pair.first][pair.second] = -1;
+            int r = random.nextInt(randomUpperBound);
+            count += r;
         }
+        this.getScoreText().setText(String.valueOf(Integer.parseInt(this.getScoreText().getText().toString()) + count));
     }
 
     public void moveRemovedCellsUp(int[][] matrix) {
@@ -427,6 +428,8 @@ public class GameView extends View {
     }
 
     public void resetButtonClicked() {
-
+        this.getScoreText().setText(String.valueOf(0));
+        this.matrix = generateRandomMatrix(cols, rows, randomUpperBound);
+        invalidate();
     }
 }
