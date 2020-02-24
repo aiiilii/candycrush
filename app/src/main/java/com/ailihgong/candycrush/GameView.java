@@ -1,9 +1,11 @@
 package com.ailihgong.candycrush;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Pair;
@@ -19,10 +21,12 @@ public class GameView extends View {
 
     private static Paint paintBlock = null;
 
+    private Bitmap bm = null;
+
     private static Random random = new Random();
 
     private boolean swapState = false;
-    
+
     private int lastTouchC;
     private int lastTouchR;
     private int newTouchC;
@@ -95,22 +99,30 @@ public class GameView extends View {
                 System.out.print(matrix[i][j]);
                 System.out.print(" ");
                 if (matrix[i][j] == 0) {
-                    paintBlock.setColor(Color.argb(255, 255, 0, 0));
+                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.yellowcandy);
+                    //paintBlock.setColor(Color.argb(255, 255, 0, 0));
                 }else if (matrix[i][j] == 1) {
-                    paintBlock.setColor(Color.argb(255, 255, 255, 0));
+                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.redcandy);
+                    //paintBlock.setColor(Color.argb(255, 255, 255, 0));
                 } else if (matrix[i][j] == 2) {
-                    paintBlock.setColor(Color.argb(255, 255, 255, 255));
+                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.greencnady);
+                    //paintBlock.setColor(Color.argb(255, 255, 255, 255));
                 } else if (matrix[i][j] == 3) {
-                    paintBlock.setColor(Color.argb(255, 0, 255, 0));
+                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.bluecandy);
+                    //paintBlock.setColor(Color.argb(255, 0, 255, 0));
                 } else if (matrix[i][j] == 4) {
-                    paintBlock.setColor(Color.argb(255, 0, 0, 255));
+                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.purplecandy);
+                    //paintBlock.setColor(Color.argb(255, 0, 0, 255));
                 } else if (matrix[i][j] == 5) {
-                    paintBlock.setColor(Color.argb(255, 0, 255, 255));
+                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.orangecandy);
+                    //paintBlock.setColor(Color.argb(255, 0, 255, 255));
                 } else if (matrix[i][j] == -1) {
-                    paintBlock.setColor(Color.argb(0, 0, 0, 0));
+                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.white);
+                    //paintBlock.setColor(Color.argb(0, 0, 0, 0));
                 }
 
-                canvas.drawRoundRect(i * size, j * size, size + i * size, size + j * size, 1, 1, paintBlock);
+                //canvas.drawRoundRect(i * size, j * size, size + i * size, size + j * size, 1, 1, paintBlock);
+                canvas.drawBitmap(bm, null, new Rect(i * size, j * size, (size + i * size), size + j * size),  null);
             }
 
             System.out.println();
