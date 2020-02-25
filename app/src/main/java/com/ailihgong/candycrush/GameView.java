@@ -19,8 +19,10 @@ import java.util.Set;
 
 public class GameView extends View {
 
+    // not needed for actual candies
     private static Paint paintBlock = null;
 
+    // drawing candies on canvas
     private Bitmap bm = null;
 
     private static Random random = new Random();
@@ -55,16 +57,15 @@ public class GameView extends View {
         this.matrix = generateRandomMatrix(cols, rows, randomUpperBound);
     }
 
+    // For generating initial matrix
     private int[][] generateRandomMatrix(int cols, int rows, int randomUpperBound) {
         int[][] matrix = new int[cols][rows];
-
-//        int[] dx = new int[] {-1, 0, 0, 1};
-//        int[] dy = new int[] {0, -1, 1, 0};
 
         for (int i = 0; i < cols; i++) {
             for (int j = 0; j < rows; j++) {
                 int r = random.nextInt(randomUpperBound);
 
+                // when first generating the matrix, cannot have 3 of the same color next to each other
                 while ((i - 2 >= 0 && matrix[i - 1][j] == r && matrix[i - 2][j] == r) || (j - 2 >= 0 &&matrix[i][j - 1] == r && matrix[i][j - 2] == r) ||
                         (i - 1 >= 0 && j - 1 >= 0 && matrix[i - 1][j] == r && matrix[i - 1][j - 1] == r) || (i - 1 >= 0 && j - 1 >= 0 && matrix[i][j - 1] == r && matrix[i - 1][j - 1] == r) ||
                         (i - 1 >= 0 && j + 1 < rows && matrix[i - 1][j + 1] == r && matrix[i - 1][j] == r) || (i - 1 >= 0 && j - 1 >= 0 && matrix[i - 1][j] == r && matrix[i][j - 1] == r)) {
@@ -77,6 +78,13 @@ public class GameView extends View {
         return matrix;
     }
 
+    private Bitmap bmYellowcandy = BitmapFactory.decodeResource(getResources(), R.drawable.yellowcandy);
+    private Bitmap bmRedcandy = BitmapFactory.decodeResource(getResources(), R.drawable.redcandy);
+    private Bitmap bmGreencnady = BitmapFactory.decodeResource(getResources(), R.drawable.greencnady);
+    private Bitmap bmBluecandy = BitmapFactory.decodeResource(getResources(), R.drawable.bluecandy);
+    private Bitmap bmPurplecandy = BitmapFactory.decodeResource(getResources(), R.drawable.purplecandy);
+    private Bitmap bmOrangecandy = BitmapFactory.decodeResource(getResources(), R.drawable.orangecandy);
+    private Bitmap bmWhite = BitmapFactory.decodeResource(getResources(), R.drawable.white);
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -99,25 +107,25 @@ public class GameView extends View {
                 System.out.print(matrix[i][j]);
                 System.out.print(" ");
                 if (matrix[i][j] == 0) {
-                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.yellowcandy);
+                    bm = bmYellowcandy;
                     //paintBlock.setColor(Color.argb(255, 255, 0, 0));
                 }else if (matrix[i][j] == 1) {
-                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.redcandy);
+                    bm = bmRedcandy;
                     //paintBlock.setColor(Color.argb(255, 255, 255, 0));
                 } else if (matrix[i][j] == 2) {
-                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.greencnady);
+                    bm = bmGreencnady;
                     //paintBlock.setColor(Color.argb(255, 255, 255, 255));
                 } else if (matrix[i][j] == 3) {
-                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.bluecandy);
+                    bm = bmBluecandy;
                     //paintBlock.setColor(Color.argb(255, 0, 255, 0));
                 } else if (matrix[i][j] == 4) {
-                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.purplecandy);
+                    bm = bmPurplecandy;
                     //paintBlock.setColor(Color.argb(255, 0, 0, 255));
                 } else if (matrix[i][j] == 5) {
-                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.orangecandy);
+                    bm = bmOrangecandy;
                     //paintBlock.setColor(Color.argb(255, 0, 255, 255));
                 } else if (matrix[i][j] == -1) {
-                    bm = BitmapFactory.decodeResource(getResources(), R.drawable.white);
+                    bm = bmWhite;
                     //paintBlock.setColor(Color.argb(0, 0, 0, 0));
                 }
 
@@ -129,6 +137,7 @@ public class GameView extends View {
         }
     }
 
+    // When two blocks are swapped
     private void swap(int c, int r, int nc, int nr) {
         System.out.println("IN SWAP");
         int temp = matrix[c][r];
@@ -137,6 +146,8 @@ public class GameView extends View {
 
         Set<Pair<Integer, Integer>> set1 = getShouldRemoveCells(this.matrix, c, r);
         Set<Pair<Integer, Integer>> set2 = getShouldRemoveCells(this.matrix, nc, nr);
+
+        // if set1 is empty or set2 is empty, meaning cannot create successful swap, then swap back to previous state;
         if (set1.isEmpty() && set2.isEmpty()) {
             temp = matrix[c][r];
             matrix[c][r] = matrix[nc][nr];
@@ -153,6 +164,7 @@ public class GameView extends View {
 
     }
 
+    // Waterfall remove cell movement
     public void handleRemoveCells() {
         swapState = true;
 
@@ -201,6 +213,8 @@ public class GameView extends View {
         }
 
         switch (action) {
+
+            // finger down
             case MotionEvent.ACTION_DOWN: {
                 // Remember where we started (for dragging)
                 lastTouchC = (int) (ev.getX() / size);
@@ -212,6 +226,7 @@ public class GameView extends View {
                 break;
             }
 
+            // finger movement
             case MotionEvent.ACTION_MOVE: {
                 System.out.println("move");
 
@@ -222,6 +237,7 @@ public class GameView extends View {
                 break;
             }
 
+            // finger up
             case MotionEvent.ACTION_UP: {
                 System.out.println("ACTION_UP");
 
