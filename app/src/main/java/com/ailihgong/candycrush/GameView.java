@@ -193,9 +193,11 @@ public class GameView extends View {
                 removeCells(matrix, set3);
                 invalidate();
 
+                // if there are matched 3 cells, then keep calling this function
                 if (isAnyNeg(matrix)) {
                     handleRemoveCells();
                 } else {
+                    // else, change swapState to false so can make the next finger down movement
                     swapState = false;
                 }
             }
@@ -267,6 +269,7 @@ public class GameView extends View {
         return true;
     }
 
+    // Record the indices in pair and put them into a set
     public Set<Pair<Integer, Integer>> getShouldRemoveCells(int[][] matrix, int c, int r) {
         Set<Pair<Integer, Integer>> res = new HashSet<Pair<Integer, Integer>>();
 
@@ -327,6 +330,7 @@ public class GameView extends View {
         return res;
     }
 
+    // change the cells in the pair set into -1
     public void removeCells(int[][] matrix, Set<Pair<Integer, Integer>> shouldRemoveCells) {
         int count = 0;
         for (Pair<Integer, Integer> pair : shouldRemoveCells) {
@@ -337,6 +341,7 @@ public class GameView extends View {
         this.getScoreText().setText(String.valueOf(Integer.parseInt(this.getScoreText().getText().toString()) + count));
     }
 
+    // move cells upward
     public void moveRemovedCellsUp(int[][] matrix) {
         System.out.println("In moving removed cells upwards");
 
@@ -362,6 +367,7 @@ public class GameView extends View {
         }
     }
 
+    // randomly fill cells on the top
     public void fillNewCells(int[][] matrix) {
         int i = 0;
         int j = 0;
@@ -383,6 +389,7 @@ public class GameView extends View {
         }
     }
 
+    // search the whole matrix and find the indices of the cells to be removed; this happens after the first stack being removed
     public static Set<Pair<Integer, Integer>> findAllCellsToRemove(int[][] matrix) {
         Set<Pair<Integer, Integer>> set = new HashSet<Pair<Integer, Integer>>();
         for (int c = 0; c < matrix[0].length; c++) {
@@ -435,6 +442,7 @@ public class GameView extends View {
         return set;
     }
 
+    // search the whole matrix to see if there are any matched 3 cells, if yes, cursively keep removing the cells up
     public boolean isAnyNeg(int[][] matrix) {
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
